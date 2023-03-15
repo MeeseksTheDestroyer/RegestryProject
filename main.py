@@ -1,16 +1,13 @@
 import winreg
 import os
 import sys
-import win32com.shell.shell as shell
-ASADMIN = 'asadmin'
 
-if sys.argv[-1] != ASADMIN:
-    script = os.path.abspath(sys.argv[0])
-    params = ' '.join([script] + sys.argv[1:] + [ASADMIN])
-    shell.ShellExecuteEx(lpVerb='runas', lpFile=sys.executable, lpParameters=params)
+def lastFind(string, char):
+    tmp=None
+    for i in range(0, len(string), 1):
+        if(string[i]==char): tmp = i
 
-
-
+    return tmp
 
 
 class Task:
@@ -30,13 +27,14 @@ class Task:
 
             winreg.CloseKey(key)
         except:
-            print(self.register_path)
-            print(self.description)
-            print(self.key_name)
-            print(self.key_value)
-            print(self.mode)
+            print("------------------------- Error with set an key value -------------------------")
+            print(f"Path: {self.register_path}")
+            print(f"Description: {self.description}")
+            print(f"Key name: {self.key_name}")
+            print(f"Key value: {self.key_value}")
+            print(f"{self.mode}")
             print(self.key_type)
-            print("----------------------------------------------")
+            print("------------------------- /////////////////////////// -------------------------")
 
 
         
@@ -96,13 +94,12 @@ class Tweaker:
         for i in self.tasks:    
             i.run()
 
-tweaker = Tweaker("data\\mega_tweak_registry_pack.txt")
+path = __file__[0:lastFind(__file__, '\\')]
+print(path)
+tweaker = Tweaker(f"{path}\\data\\mega_tweak_registry_pack.txt")
 tweaker.createTasks()
-for i in tweaker.tasks:
-            print(i.register_path)
-            print(i.description)
-            print(i.key_name)
-            print(i.key_value)
-            print(i.mode)
-            print(i.key_type)
+
 tweaker.runAllTasks()
+input("Program complete...")
+
+#17:53
