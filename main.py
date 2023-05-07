@@ -1,7 +1,7 @@
 import winreg
 import os
 import sys
-
+c=1
 def lastFind(string, char):
     tmp=None
     for i in range(0, len(string), 1):
@@ -54,6 +54,7 @@ class Tweaker:
             "dword":winreg.REG_DWORD,
             "string":winreg.REG_SZ
         }
+        self.c = 1
     def read_file(self, path):
         with open(path, 'r') as file:
             return file.read()
@@ -66,7 +67,7 @@ class Tweaker:
             tmp_task.description = g[0]
             
             tmp_task.key_name = g[2].split("=")[0].replace("\"", "")
-            
+            print(g)
             if(len(g[2].split("=")[1].split(":")) > 1):
                 b1=g[2].split("=")[1].split(":")[0]
                 b2=g[2].split("=")[1].split(":")[1]
@@ -90,13 +91,16 @@ class Tweaker:
             tmp_task.register_path = g[1][g[1].find("\\")+1:]
             
             self.tasks.append(tmp_task)
+
+            print(f"Completed: {self.c}")
+            self.c=self.c+1
     def runAllTasks(self):
         for i in self.tasks:    
             i.run()
 
 path = __file__[0:lastFind(__file__, '\\')]
 print(path)
-tweaker = Tweaker(f"{path}\\data\\mega_tweak_registry_pack.txt")
+tweaker = Tweaker(f"data\\mega_tweak_registry_pack.txt")
 tweaker.createTasks()
 
 tweaker.runAllTasks()
